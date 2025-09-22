@@ -1,9 +1,7 @@
 name: Clean Notebooks
 
 on:
-  push:
-    paths:
-      - "**/*.ipynb"
+  push:   # run on all pushes, so we never miss Colab saves
 
 jobs:
   call-cleaner:
