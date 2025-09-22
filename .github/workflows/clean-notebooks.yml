@@ -1,0 +1,10 @@
+name: Clean Notebooks
+
+on:
+  push:
+    paths:
+      - "**/*.ipynb"   # only run when notebooks change
+
+jobs:
+  call-cleaner:
+    uses: jan-zika/notebook-cleaner/.github/workflows/clean-notebooks.yml@main
