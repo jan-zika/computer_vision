@@ -3,7 +3,7 @@ name: Clean Notebooks
 on:
   push:
     paths:
-      - "**/*.ipynb"   # only run when notebooks change
+      - "**/*.ipynb"
 
 jobs:
   call-cleaner:
