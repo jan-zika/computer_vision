@@ -1,8 +1,28 @@
 name: Clean Notebooks
 
 on:
-  push:   # run on all pushes, so we never miss Colab saves
+  push:   # always run, even when Colab overwrites an existing notebook
 
 jobs:
-  call-cleaner:
-    uses: jan-zika/notebook-cleaner/.github/workflows/clean-notebooks.yml@main
+  clean:
+    if: github.actor != 'github-actions[bot]'   # prevent loops
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout your repo (with notebooks)
+      - uses: actions/checkout@v4
+
+      # 2. Run the cleaner action from jan-zika/notebook-cleaner
+      - uses: jan-zika/notebook-cleaner@main
+
+      # 3. Commit back if anything was modified
+      - name: Commit cleaned notebooks
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git config user.name "github-actions"
+            git config user.email "actions@github.com"
+            git add .
+            git commit -m "Clean notebooks (remove interactive widgets)"
+            git push
+          else
+            echo "Nothing to commit."
+          fi
